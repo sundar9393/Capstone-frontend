@@ -1,0 +1,22 @@
+.header {
+    background-color: rgb(48, 57, 80);
+    padding: 1%;
+    height: 36px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.app-logo {
+    color: white;
+}
+
+.white {
+    color: white;
+}
+
+.searchBar {
+    
+    width: 300px;
+    
+}
