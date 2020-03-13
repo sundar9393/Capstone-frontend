@@ -18,9 +18,39 @@ const styles = theme => ({
 
 class Header extends Component {
 
+    constructor() {
+        super();
+        this.state = {
+            moviesList: [{}]
+        }
+    }
+
+    searchMoviesHandler = (e) => {
+
+        if(e.target.value !== "") {
+            
+        let that = this;
+        let requestData = null;
+        let searchMovies = new XMLHttpRequest();
+        searchMovies.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+                console.log(JSON.parse(this.responseText));
+                that.setState({moviesList: JSON.parse(this.responseText).movies});
+            }
+        })
+
+        searchMovies.open("GET", "http://localhost:8080/api/restaurant/name/"+e.target.value);
+        searchMovies.setRequestHeader("Cache-Control", "no-cache");
+        searchMovies.setRequestHeader("Access-Control-Allow-Origin", "*");
+        searchMovies.setRequestHeader("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS");
+        searchMovies.send(requestData);
+
+    } 
+
+    }
+
 
     render() {
-        const { classes } = this.props;
         return(
             <div>
                 <header className='header'>
@@ -33,10 +63,8 @@ class Header extends Component {
                         <InputAdornment position="start">
                             <SearchIcon fontSize="large" htmlColor="white" />
                         </InputAdornment>
-                        }
-                    InputProps={{
-                        classes: {input : classes.input}
-                    }}                  
+                        }                
+                    onChange={this.searchMoviesHandler}                 
                     />
 
                     <Button 
