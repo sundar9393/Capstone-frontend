@@ -9,11 +9,36 @@ import { faStar } from '@fortawesome/free-solid-svg-icons'
 import { faRupeeSign } from '@fortawesome/free-solid-svg-icons'
 
 class Home extends Component {
+
+    constructor() {
+        super();
+        this.state = {
+            restaurants : [{}]
+        }
+    }
+
+    componentWillMount() {
+        let that = this;
+        let data = null;
+        let xhr = new XMLHttpRequest();
+
+        xhr.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+                that.setState({restaurants : JSON.parse(this.responseText)});
+            }
+        })
+
+        xhr.open("GET", "http://localhost:8080/api/restaurant");
+        xhr.setRequestHeader("Cache-Control", "no-cache");
+        xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+        xhr.send(data);
+    }
+
     render() {
         return (
             <div>
                 <Header />
-                <div className="cardContainer">
+                <div className="cardContainer" onLoad = {this.displayRestaurantCardsHandler}>
                     <Card className="restaurantCard">
                         <CardActionArea>
                             <CardMedia
