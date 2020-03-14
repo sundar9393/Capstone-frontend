@@ -46,8 +46,8 @@ class Header extends Component {
             moviesList: [{}],
             modalIsOpen: false,
             value: 0,
-            contactNum: "",
-            contactNumRequired: "dispNone",
+            contactnumber: "",
+            contactnumberRequired: "dispNone",
             isInvalidNumber: false,
             password: "",
             passwordRequired: "dispNone",
@@ -58,7 +58,12 @@ class Header extends Component {
             lastname: "",
             lastnameRequired: "dispNone",
             email: "",
-            emailRequired: "dispNone"
+            emailRequired: "dispNone",
+            isInvalidPass: false,
+            isInvalidEmail: false,
+            registrationSuccess: false,
+            loginMessage: "dispNone",
+            registerMessage: "dispNone"
         }
     }
 
@@ -90,10 +95,25 @@ class Header extends Component {
         this.setState({
             modalIsOpen: true,
             value: 0,
-            contactNum: "",
-            contactNumRequired: "dispNone",
+            contactnumber: "",
+            contactnumberRequired: "dispNone",            
             password: "",
-            passwordRequired: "dispNone"
+            passwordRequired: "dispNone",
+            isInvalidNumber: false,
+            openPopupMsg: false,
+            firstname: "",
+            firstnameRequired: "dispNone",
+            lastname: "",
+            lastnameRequired: "dispNone",
+            email: "",
+            emailRequired: "dispNone",
+            isInvalidPass: false,
+            isInvalidEmail: false,
+            loggedIn: false,
+            registrationSuccess: false,
+            loginMessage: "dispNone",
+            registerMessage: "dispNone"
+            
         })
     }
 
@@ -101,8 +121,8 @@ class Header extends Component {
         this.setState({value})
     }
 
-    inputContactNumChangeHandler = (e) => {
-        this.setState({contactNum: e.target.value})
+    inputcontactnumberChangeHandler = (e) => {
+        this.setState({contactnumber: e.target.value})
     }
 
     inputPasswordChangeHandler = (e) => {
@@ -110,24 +130,26 @@ class Header extends Component {
     }
 
     closeModalHandler = () => {
-        this.setState({modalIsOpen: false})
+        this.setState({
+            modalIsOpen: false
+        })
     }
 
     loginClickHandler = () => {
 
-        this.state.contactNum === "" ? this.setState({contactNumRequired: "dispBlock"}) :
-        this.setState({contactNumRequired: "dispNone"});
+        this.state.contactnumber === "" ? this.setState({contactnumberRequired: "dispBlock"}) :
+        this.setState({contactnumberRequired: "dispNone"});
         this.state.password === "" ? this.setState({passwordRequired: "dispBlock"}) :
         this.setState({passwordRequired: "dispNone"});
 
         if(this.state.password !== "" && this.state.password.length !== 10) {
             this.setState({
                 isInvalidNumber: true,
-                contactNumRequired: "dispBlock"
+                contactnumberRequired: "dispBlock"
             })
         }
 
-        if((this.state.contactNum === "") || (this.state.password === "") || (this.state.isInvalidNumber === true)) {
+        if((this.state.contactnumber === "") || (this.state.password === "") || (this.state.isInvalidNumber === true)) {
             return;
         }
 
@@ -137,7 +159,7 @@ class Header extends Component {
         let that=this;
 
         let loginData =  null;
-        let loginAuthHeader = new Buffer(this.state.contactNum+':'+this.state.password).toString('base64');
+        let loginAuthHeader = new Buffer(this.state.contactnumber+':'+this.state.password).toString('base64');
 
         let xhrlogin = new XMLHttpRequest();
         xhrlogin.addEventListener("readystatechange", function() {
@@ -147,7 +169,11 @@ class Header extends Component {
                 console.log(JSON.parse(this.responseText));                
                 sessionStorage.setItem("uuid", JSON.parse(this.responseText).id);
                 sessionStorage.setItem("access-token", xhrlogin.getResponseHeader("access-token"));                
-                that.setState({openPopupMsg: true})
+                that.setState({
+                    openPopupMsg: true,
+                    loggedIn: true,
+                    loginMessage: "dispBlock message"
+                })
                 that.closeModalHandler();
 
             }
@@ -182,8 +208,110 @@ class Header extends Component {
         this.setState({email: e.target.value})
     }
 
+
+
     registerClickHandler = () => {
+
+        this.state.firstname === "" ? this.setState({firstnameRequired: "dispBlock"}) :
+        this.setState({firstnameRequired: "dispNone"});
+        this.state.lastname === "" ? this.setState({lastnameRequired: "dispBlock"}) :
+        this.setState({lastnameRequired: "dispNone"});
+        this.state.email === "" ? this.setState({emailRequired: "dispBlock"}) :
+        this.setState({emailRequired: "dispNone"});
+
+        this.state.password === "" ? this.setState({passwordRequired: "dispBlock"}) :
+        this.setState({passwordRequired: "dispNone"});
+
+        this.state.contactnumber === "" ? this.setState({contactnumberRequired: "dispBlock"}) :
+        this.setState({contactnumberRequired: "dispNone"});
         
+
+        if(this.state.contactnumber !== "" && /^\d{10}$/.test(this.state.contactnumber) === false) {
+            
+            this.setState({
+                isInvalidNumber: true,
+                contactnumberRequired: "dispBlock"
+            })
+        } else if(this.state.contactnumber !== "" && /^\d{10}$/.test(this.state.contactnumber) === true) {
+            this.setState({
+                isInvalidNumber: false,
+                contactnumberRequired: "dispNone"
+            })    
+        }
+
+        if(this.state.password !== "" && /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,20})/.test(this.state.password) === false) {
+            
+            this.setState({
+                isInvalidPass: true,
+                passwordRequired: "dispBlock"                
+            })
+            
+        } else if(this.state.password !== "" && /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,20})/.test(this.state.password) === true) {
+            this.setState({
+                isInvalidPass: false,
+                passwordRequired: "dispNone"                
+            })
+
+        }
+        
+
+        if(this.state.email !== "" && 
+        /[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}/igm.test(this.state.email) === false) {
+
+            this.setState({
+                isInvalidEmail: true,
+                emailRequired: "dispBlock"
+            })
+
+        } else if(this.state.email !== "" && 
+        /[A-Z0-9._%+-]+@[A-Z0-9-]+.+.[A-Z]{2,4}/igm.test(this.state.email) === true) {
+            this.setState({
+                isInvalidEmail: false,
+                emailRequired: "dispNone"
+            })
+
+        }
+
+        if((this.state.firstname === "") || (this.state.lastname === "") || (this.state.email === "")
+        || (this.state.contactnumber === "") || (this.state.password === "") || (this.state.isInvalidEmail)
+        || (this.state.isInvalidNumber) || (this.state.isInvalidPass)) {
+
+            return;
+        }
+
+        //registration api call
+
+
+        let that=this;
+        let signupData = JSON.stringify({
+
+            "contact_number": this.state.contactnumber,
+            "email_address": this.state.email,
+            "first_name": this.state.firstname,
+            "last_name": this.state.lastname,
+            "password": this.state.password
+            
+          })
+        let xhrsignup = new XMLHttpRequest();
+        xhrsignup.addEventListener("readystatechange", function() {
+            if(this.readyState === 4) {
+                console.log(JSON.parse(xhrsignup.responseText));
+                that.setState({
+                    registrationSuccess: true,
+                    openPopupMsg: true,
+                    registerMessage: "dispBlock message"
+                });
+                that.openModalHandler();
+            }
+        })
+
+        xhrsignup.open("POST", "http://localhost:8080/api/customer/signup");
+        xhrsignup.setRequestHeader("Content-Type", "application/json");
+        xhrsignup.setRequestHeader("Cache-Control", "no-cache");
+        xhrsignup.send(signupData);
+
+
+
     }
  
 
@@ -230,9 +358,9 @@ class Header extends Component {
                         <FormControl required>
 
                             <InputLabel htmlFor="contact">Contact No</InputLabel>
-                            <Input id="contact" type="text" contactNum={this.state.contactNum} 
-                                onChange={this.inputContactNumChangeHandler} />
-                            <FormHelperText className={this.state.contactNumRequired}>
+                            <Input id="contact" type="text" contactnumber={this.state.contactnumber} 
+                                onChange={this.inputcontactnumberChangeHandler} />
+                            <FormHelperText className={this.state.contactnumberRequired}>
                                 {this.state.isInvalidNumber === true ? <span className="red">Invalid Contact</span>
                                 : <span className="red">required</span> }                                     
                             </FormHelperText>  
@@ -242,7 +370,7 @@ class Header extends Component {
                         <FormControl required>
 
                             <InputLabel htmlFor="password">Password</InputLabel>
-                            <Input id="password" type="password" contactNum={this.state.password} 
+                            <Input id="password" type="password" contactnumber={this.state.password} 
                                 onChange={this.inputPasswordChangeHandler} />
                             <FormHelperText className={this.state.passwordRequired}>
                                     <span className="red">required</span>                               
@@ -291,7 +419,10 @@ class Header extends Component {
                                 onChange={this.emailChangeHandler} />
                                 
                                 <FormHelperText className={this.state.emailRequired}>
-                                    <span className="red">required</span>
+                                    
+                                    {this.state.isInvalidEmail ? <span className="red">Invalid Email id!!</span>
+                                    : <span className="red">required</span>}
+
                                 </FormHelperText>
 
                             </FormControl><br /><br />
@@ -302,18 +433,24 @@ class Header extends Component {
                                 onChange={this.inputPasswordChangeHandler} />
                                 
                                 <FormHelperText className={this.state.passwordRequired}>
-                                    <span className="red">required</span>
+
+                                    {this.state.isInvalidPass ? <span className="red">Password must contain at least one capital letter, one small letter, one number, and one special character</span>:
+                                     <span className="red">required</span>}
+                                    
                                 </FormHelperText>
 
                             </FormControl><br /><br />
 
                             <FormControl required>
                                 <InputLabel htmlFor="contact">Contact</InputLabel>
-                                <Input id="contact" type="text" contact={this.state.contactNum}
-                                onChange={this.inputContactNumChangeHandler} />
+                                <Input id="contact" type="text" contactnumber={this.state.contactnumber}
+                                onChange={this.inputcontactnumberChangeHandler} />
                                 
-                                <FormHelperText className={this.state.contactNumRequired}>
-                                    <span className="red">required</span>
+                                <FormHelperText className={this.state.contactnumberRequired}>
+
+                                    {this.state.isInvalidNumber ? <span className="red">Contact No. must contain only numbers and must be 10 digits long</span>:
+                                     <span className="red">required</span>}
+                                    
                                 </FormHelperText>
 
                             </FormControl><br /><br />
@@ -342,8 +479,11 @@ class Header extends Component {
                     message={
                         <span id="client-snackbar">
                         <div className="confirm">
-                            <div className="message"> 
+                            <div className={this.state.loginMessage}> 
                                 Logged in successfully!!
+                            </div>
+                            <div className={this.state.registerMessage}>
+                                Registered successfully, Please Login!!
                             </div>
                         </div>
                         </span>
