@@ -81,7 +81,7 @@ class Header extends Component {
             }
         })
 
-        searchMovies.open("GET", "http://localhost:8080/api/restaurant/name/"+e.target.value);
+        searchMovies.open("GET", this.props.baseUrl+"restaurant/name/"+e.target.value);
         searchMovies.setRequestHeader("Cache-Control", "no-cache");
         searchMovies.setRequestHeader("Access-Control-Allow-Origin", "*");
         searchMovies.setRequestHeader("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS");
@@ -179,7 +179,7 @@ class Header extends Component {
             }
         })
 
-        xhrlogin.open("POST", "http://localhost:8080/api/customer/login");
+        xhrlogin.open("POST", this.props.baseUrl+"/customer/login");
         xhrlogin.setRequestHeader("authorization", "Basic "+loginAuthHeader);
         xhrlogin.setRequestHeader("Cache-Control", "no-cache");
         xhrlogin.send(loginData);
@@ -305,7 +305,7 @@ class Header extends Component {
             }
         })
 
-        xhrsignup.open("POST", "http://localhost:8080/api/customer/signup");
+        xhrsignup.open("POST", this.props.baseUrl+"customer/signup");
         xhrsignup.setRequestHeader("Content-Type", "application/json");
         xhrsignup.setRequestHeader("Cache-Control", "no-cache");
         xhrsignup.send(signupData);

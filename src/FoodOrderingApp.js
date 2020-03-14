@@ -4,6 +4,13 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 import Home from "./screens/home/Home.js";
 
 class FoodOrderingApp extends Component {
+
+    constructor() {
+        super();
+        this.baseUrl = "http://localhost:8080/api/v1/"
+    }
+
+
     render() {
         return(
             <Router>

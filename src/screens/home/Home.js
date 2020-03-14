@@ -5,7 +5,7 @@ class Home extends Component {
     render() {
         return (
             <div>
-                <Header />
+                <Header baseUrl={this.props.baseUrl} />
                 Food Ordering App Home Page
             </div>
         )
