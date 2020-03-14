@@ -2,13 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import Header from '../src/common/header/Header';
+import FoodOrderingApp from './FoodOrderingApp';
 
 ReactDOM.render(
     <div>
-        <Header />
-        Food Ordering App
-
+        <FoodOrderingApp />
     </div>,
     document.getElementById('root')
 );
