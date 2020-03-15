@@ -48,3 +48,15 @@
   .snackbar {
     margin-bottom: 22px;
   }
+
+  .accountIcon {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+
+  .loggedinUser {
+      color: rgb(188, 191, 197);
+      font-size: larger;
+  }
