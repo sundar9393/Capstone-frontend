@@ -20,3 +20,43 @@
     width: 300px;
     
 }
+
+.tabs {
+    margin: 20px;
+}
+
+.dispNone {
+    display: none;
+}
+
+.dispBlock {
+    display: block;
+}
+
+.red {
+    color: red;
+}
+
+.confirm {
+    display: flex;
+  }
+
+.message {
+    margin: 4px 0px 0px 16px
+  }  
+
+  .snackbar {
+    margin-bottom: 22px;
+  }
+
+  .accountIcon {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+
+  .loggedinUser {
+      color: rgb(188, 191, 197);
+      font-size: larger;
+  }

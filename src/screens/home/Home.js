@@ -46,7 +46,7 @@ class Home extends Component {
     render() {
         return (
             <div>
-                <Header />
+                <Header baseUrl={this.props.baseUrl} />
                 <div className="cardContainer" onLoad = {this.displayRestaurantCardsHandler}>
                     <Card className="restaurantCard">
                         <CardActionArea>
@@ -57,7 +57,7 @@ class Home extends Component {
                                 Restaurant Title
                             </div>
                             <div className="restaurantCategories">
-                                Chinese, Lebanese
+                                Restaurant Categories
                             </div>
                             <div className="restaurantDetails">
                                 <div className="restaurantRating">
