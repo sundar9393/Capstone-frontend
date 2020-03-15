@@ -34,8 +34,33 @@
     display: flex;  
     margin-top: 25px;
     margin-left: 40px;
+    flex-direction: column;
   }
 
   .categoryItems {
       display: block;
   }
+
+  .red{
+      color: red;
+  }
+
+  .green {
+      color: green;
+  }
+
+  .itemName {
+      margin-left: 15px;
+      
+  }
+
+  .itemPrice{
+      position: absolute;
+      left: 500px;
+}
+
+.addIcon {
+    position: absolute;
+    left: 600px;
+}
+
