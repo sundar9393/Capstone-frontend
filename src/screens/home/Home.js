@@ -13,7 +13,7 @@ class Home extends Component {
     constructor() {
         super();
         this.state = {
-            restaurants : [{}]
+            restaurants : []
         }
     }
 
@@ -32,6 +32,15 @@ class Home extends Component {
         xhr.setRequestHeader("Cache-Control", "no-cache");
         xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
         xhr.send(data);
+    }
+
+    renderRestaurantCard() {
+        // Function that renders one single card
+    }
+
+    displayRestaurantCardsHandler() {
+        // Function that takes the data from "restaurants" array in State and renders the cards
+        // for all the restaurants
     }
 
     render() {
