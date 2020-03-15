@@ -13,7 +13,7 @@ class Home extends Component {
     constructor() {
         super();
         this.state = {
-            restaurants : []
+            restaurants: []
         }
     }
 
@@ -22,55 +22,49 @@ class Home extends Component {
         let data = null;
         let xhr = new XMLHttpRequest();
 
-        xhr.addEventListener("readystatechange", function() {
-            if(this.readyState === 4) {
-                that.setState({restaurants : JSON.parse(this.responseText)});
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                that.setState({ restaurants: JSON.parse(this.responseText) });
             }
         })
 
         xhr.open("GET", "http://localhost:8080/api/restaurant");
         xhr.setRequestHeader("Cache-Control", "no-cache");
-        xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
         xhr.send(data);
-    }
-
-    renderRestaurantCard() {
-        // Function that renders one single card
-    }
-
-    displayRestaurantCardsHandler() {
-        // Function that takes the data from "restaurants" array in State and renders the cards
-        // for all the restaurants
     }
 
     render() {
         return (
             <div>
                 <Header baseUrl={this.props.baseUrl} />
-                <div className="cardContainer" onLoad = {this.displayRestaurantCardsHandler}>
-                    <Card className="restaurantCard">
-                        <CardActionArea>
-                            <CardMedia
-                                className="restaurantImage"
-                                image="Image Asset 1.jpg" />
+                <div className="cardContainer">
+                    {this.state.restaurants.map(restaurant => (
+                        <Card key={restaurant.id} id={restaurant.id} className="restaurantCard">
+                            <CardActionArea>
+                                <CardMedia
+                                    className="restaurantImage"
+                                    image={restaurant.photo_URL} />
+                            </CardActionArea>
                             <div className="restaurantName">
-                                Restaurant Title
+                                {restaurant.restaurant_name}
                             </div>
                             <div className="restaurantCategories">
-                                Restaurant Categories
+                                {restaurant.categories}
                             </div>
                             <div className="restaurantDetails">
                                 <div className="restaurantRating">
                                     <FontAwesomeIcon icon={faStar} />
-                                    <span> Rating</span>
+                                    <span> {restaurant.customer_rating}</span>
+                                    <span> ({restaurant.number_customers_rated})</span>
                                 </div>
                                 <div className="restaurantPrice">
                                     <FontAwesomeIcon icon={faRupeeSign} />
-                                    <span> for two</span>
-                                    </div>
+                                    <span> {restaurant.average_price} for two</span>
+                                </div>
                             </div>
-                        </CardActionArea>
-                    </Card>
+
+                        </Card>
+                    ))}
                 </div>
             </div>
         )
