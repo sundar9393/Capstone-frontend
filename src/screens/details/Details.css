@@ -1,0 +1,6 @@
+.restaurantDiv {
+    width: 100%;
+    background-color: lightgray;
+    height: 200px;
+    display: flex;
+}
