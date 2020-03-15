@@ -1,14 +1,17 @@
 .cardContainer {
     display : flex;
     flex-direction: row;
+    justify-content: space-between;
     padding-left: 20px;
     padding-top: 15px;
     padding-right: 20px;
     padding-bottom: 15px;
+    flex-wrap: wrap;
 }
 
 .restaurantCard {
     width: 20%;
+    margin: 15px;
 }
 
 .restaurantImage {
@@ -17,9 +20,10 @@
 
 .restaurantName {
     text-align: center;
-    font-size: 2em;
+    font-size: 1.5em;
     padding: 3px;
     margin: 5px;
+    height: 50px;
 }
 
 .restaurantCategories {
