@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import './Details.css';
 import Header from "../../common/header/Header.js";
-import { Typography, Divider } from '@material-ui/core';
+import { Typography, Divider, List } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { faRupeeSign } from '@fortawesome/free-solid-svg-icons';
+import ListItem from '@material-ui/core/ListItem';
+import { faCircle } from '@fortawesome/free-solid-svg-icons';
+import AddIcon from '@material-ui/icons/Add';
 
 
 class Details extends Component {
@@ -105,8 +108,40 @@ componentWillMount() {
                 </div>
 
                 <div className="itemsNOrderDiv">
+                       {restaurant.categories.map(category => ( 
+                           
+                           <List key={category.id}>
+                                <Typography variant="h4">{category.category_name}</Typography>
+                                <Divider />
+                                {category.item_list.map(item => (
+                                    <ListItem key={item.id}>
+                                        {item.item_type === "NON_VEG" ? <FontAwesomeIcon className="red" icon={faCircle}/>:
+                                        <FontAwesomeIcon className="green" icon={faCircle}/>}
 
+                                        <Typography variant="h6">
+                                            <span className="itemName">{item.item_name}</span>
+                                        </Typography>
 
+                                        <Typography>
+                                            <span className="itemPrice">
+                                            <FontAwesomeIcon icon={faRupeeSign} />
+                                            {item.price}
+                                            </span>
+                                            
+                                        </Typography>
+
+                                        <Typography>
+                                            <span className="addIcon">
+                                                <AddIcon />
+                                            </span>
+                                        </Typography>
+
+                                       
+                                         
+                                    </ListItem>
+                                ))}
+                           </List>
+                       ))}                    
                 </div>
             </div>
         )
