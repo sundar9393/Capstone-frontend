@@ -17,7 +17,8 @@ class FoodOrderingApp extends Component {
             <Router>
                 <div className="main-container">
                     <Route exact path="/" render={({history},props) => <Home history={history} {...props} baseUrl={this.baseUrl}/>}/>
-                    <Route exact path="/profile" render={({history},props) => <Profile history={history} {...props} baseUrl={this.baseUrl} />} />
+                    <Route path="/profile" render={({history},props) => <Profile history={history} {...props} baseUrl={this.baseUrl} />} />
+                    <Route path="/details/:id" render={({history},props) => <Profile history={history} {...props} baseUrl={this.baseUrl} />} />
                 </div>
             </Router>
         )
