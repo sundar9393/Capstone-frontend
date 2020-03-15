@@ -1,6 +1,41 @@
 .restaurantDiv {
     width: 100%;
     background-color: lightgray;
-    height: 200px;
+    height: 300px;
     display: flex;
 }
+
+.leftDetails {
+    width: 20%;
+    text-align: center;
+  }
+
+  .restImg {
+      height: 250px;
+      width: 300px;
+      margin-top: 25px;
+      margin-left: 30px;
+  }
+
+  .middleDetails {
+      margin-left: 90px;
+  }
+
+  .rightDetails {
+      margin-left: 200px;
+  }
+
+  .drakGray {
+      color: gray;
+  }
+  
+  .itemsNOrderDiv {
+    width: 50%;
+    display: flex;  
+    margin-top: 25px;
+    margin-left: 40px;
+  }
+
+  .categoryItems {
+      display: block;
+  }

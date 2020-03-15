@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
 import './Details.css';
 import Header from "../../common/header/Header.js";
+import { Typography, Divider } from '@material-ui/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
+import { faRupeeSign } from '@fortawesome/free-solid-svg-icons';
+
 
 class Details extends Component {
 
@@ -8,7 +13,10 @@ class Details extends Component {
         super();
 
         this.state= {
-            restaurantDetail: {}
+            restaurantDetail: {
+                address: {},
+                categories: []
+            }
         }
     }
 
@@ -27,7 +35,7 @@ componentWillMount() {
         }
     })
 
-    xhrRestaurant.open("GET", this.props.baseUrl+"restaurant/"+this.props.match.params.id);
+    xhrRestaurant.open("GET", this.props.baseUrl+"restaurant/2461973c-a238-11e8-9077-720006ceb890");
     xhrRestaurant.setRequestHeader("Cache-Control", "no-cache");
     xhrRestaurant.setRequestHeader("Access-Control-Allow-Origin", "*");
     xhrRestaurant.send(restaurantData);
@@ -35,10 +43,69 @@ componentWillMount() {
 }
 
     render() {
+        let restaurant = this.state.restaurantDetail;
+        let categoryArray = [];
         return (
+
             <div>
                 <Header />
                 <div className="restaurantDiv">
+
+                    <div className="leftDetails">
+                    <img src={restaurant.photo_URL} alt={restaurant.restaurant_name} height className="restImg" />
+                    </div>
+
+                    <div className="middleDetails">
+                        <br /><br /><br />
+                        <div>
+                            <Typography variant="h3">{restaurant.restaurant_name}</Typography>
+                        </div>
+
+                        <div>
+                            <Typography variant="h6">{restaurant.address.locality}, {restaurant.address.city}</Typography>
+                        </div> <br />
+                         
+                        <div>
+                            {
+                                restaurant.categories.forEach((category, index)=>{
+                                categoryArray.push(category.category_name)   
+                                })                                
+                            }                            
+                            <Typography>{categoryArray.join(',')}</Typography>                               
+                        </div>
+
+                        <div>
+                            <Typography>
+                               <span> 
+                               <FontAwesomeIcon icon={faStar} />: 
+                                    { restaurant.customer_rating}
+                                </span> 
+                            </Typography>
+                        </div>
+                        <div>
+                            <Typography variant="caption"className="drakGray">AVERAGE RATING BY</Typography>   
+                            <br/>
+                            <Typography variant="caption"className="drakGray">{restaurant.number_customers_rated} CUSTOMERS</Typography>
+                        </div>
+
+                    </div>
+
+                    <div className="rightDetails">
+                        <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                            <div>
+                                <Typography>
+                                    <FontAwesomeIcon icon={faRupeeSign} /> { restaurant.average_price}
+                                </Typography>
+                                <Typography variant="caption" className="drakGray">AVERAGE COST FOR</Typography>
+                                <br/>
+                                <Typography variant="caption"className="drakGray">TWO PEOPLE</Typography>                                  
+                                
+                            </div>
+                    </div>
+                </div>
+
+                <div className="itemsNOrderDiv">
+
 
                 </div>
             </div>
