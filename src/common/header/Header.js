@@ -14,6 +14,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Typography from '@material-ui/core/Typography';
 import Snackbar from '@material-ui/core/Snackbar';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import { Link } from 'react-router-dom';
 
 
 const customStyles = {
@@ -63,7 +66,10 @@ class Header extends Component {
             isInvalidEmail: false,
             registrationSuccess: false,
             loginMessage: "dispNone",
-            registerMessage: "dispNone"
+            registerMessage: "dispNone",
+            loggedInUsername: "",
+            showUserMenu: false,
+            userMenuLoc: null
         }
     }
 
@@ -81,7 +87,7 @@ class Header extends Component {
             }
         })
 
-        searchMovies.open("GET", "http://localhost:8080/api/restaurant/name/"+e.target.value);
+        searchMovies.open("GET", this.props.baseUrl+"restaurant/name/"+e.target.value);
         searchMovies.setRequestHeader("Cache-Control", "no-cache");
         searchMovies.setRequestHeader("Access-Control-Allow-Origin", "*");
         searchMovies.setRequestHeader("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS");
@@ -109,7 +115,6 @@ class Header extends Component {
             emailRequired: "dispNone",
             isInvalidPass: false,
             isInvalidEmail: false,
-            loggedIn: false,
             registrationSuccess: false,
             loginMessage: "dispNone",
             registerMessage: "dispNone"
@@ -142,7 +147,7 @@ class Header extends Component {
         this.state.password === "" ? this.setState({passwordRequired: "dispBlock"}) :
         this.setState({passwordRequired: "dispNone"});
 
-        if(this.state.password !== "" && this.state.password.length !== 10) {
+        if(this.state.contactnumber !== "" && this.state.contactnumber.length !== 10) {
             this.setState({
                 isInvalidNumber: true,
                 contactnumberRequired: "dispBlock"
@@ -168,18 +173,20 @@ class Header extends Component {
                 
                 console.log(JSON.parse(this.responseText));                
                 sessionStorage.setItem("uuid", JSON.parse(this.responseText).id);
-                sessionStorage.setItem("access-token", xhrlogin.getResponseHeader("access-token"));                
+                sessionStorage.setItem("access-token", xhrlogin.getResponseHeader("access-token"));  
+                let username = JSON.parse(this.responseText).first_name;              
                 that.setState({
                     openPopupMsg: true,
                     loggedIn: true,
-                    loginMessage: "dispBlock message"
+                    loginMessage: "dispBlock message",
+                    loggedInUsername: username
                 })
                 that.closeModalHandler();
 
             }
         })
 
-        xhrlogin.open("POST", "http://localhost:8080/api/customer/login");
+        xhrlogin.open("POST", this.props.baseUrl+"customer/login");
         xhrlogin.setRequestHeader("authorization", "Basic "+loginAuthHeader);
         xhrlogin.setRequestHeader("Cache-Control", "no-cache");
         xhrlogin.send(loginData);
@@ -305,7 +312,7 @@ class Header extends Component {
             }
         })
 
-        xhrsignup.open("POST", "http://localhost:8080/api/customer/signup");
+        xhrsignup.open("POST", this.props.baseUrl+"customer/signup");
         xhrsignup.setRequestHeader("Content-Type", "application/json");
         xhrsignup.setRequestHeader("Cache-Control", "no-cache");
         xhrsignup.send(signupData);
@@ -313,6 +320,27 @@ class Header extends Component {
 
 
     }
+
+    userMenuHandler = (e) => {
+        this.setState({
+            showUserMenu: true,
+            userMenuLoc: e.currentTarget
+        })
+    }
+
+    closeMenuHandler = () => {
+        this.setState({showUserMenu: false})
+        }
+
+    logoutHandler = () => {
+        sessionStorage.clear();
+        this.setState({
+            loggedIn: false,
+            loggedInUsername: "",
+            showUserMenu: false,
+            userMenuLoc: null
+        })
+    }   
  
 
     render() {
@@ -332,6 +360,13 @@ class Header extends Component {
                     onChange={this.searchMoviesHandler}                 
                     />
 
+                    
+                    {this.state.loggedIn ? 
+                    <div className="accountIcon" onClick={this.userMenuHandler}>
+                     <AccountCircleIcon color="action" fontSize="large"  /> 
+                    <span className="loggedinUser">   {this.state.loggedInUsername}</span>  
+                    </div> :    
+
                     <Button 
                     variant="contained"
                     color="default"
@@ -340,7 +375,22 @@ class Header extends Component {
                     onClick={this.openModalHandler}
                     >
                         Login
-                    </Button>
+                    </Button> }
+
+                    <Menu
+                    id="simple-menu"
+                    anchorEl={this.state.userMenuLoc}
+                    keepMounted
+                    open={this.state.showUserMenu}
+                    onClose={this.closeMenuHandler}
+                    >
+                        <Link to={"/profile"}>
+                        <MenuItem>Profile</MenuItem>
+                        </Link>
+
+                        <MenuItem onClick={this.logoutHandler}>Logout</MenuItem>
+                        
+                    </Menu>
 
                 </header>
 
