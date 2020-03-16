@@ -8,6 +8,8 @@ import { faRupeeSign } from '@fortawesome/free-solid-svg-icons';
 import ListItem from '@material-ui/core/ListItem';
 import { faCircle } from '@fortawesome/free-solid-svg-icons';
 import AddIcon from '@material-ui/icons/Add';
+import Card from '@material-ui/core/Card';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 
 class Details extends Component {
@@ -19,9 +21,32 @@ class Details extends Component {
             restaurantDetail: {
                 address: {},
                 categories: []
-            }
+            },
+            cartItems: [],
+            itemname: "",
+            itemprice: "",
+            itemtype: "",
+            itempresent: false
         }
     }
+
+    addItemHandler = (name, price, type, id) => {
+        if(this.state.cartItems.includes(id)){
+            this.setState({
+                itempresent: true,
+                itemname: "",
+                itemprice: "",
+                itemtype: ""
+            })
+        } else {
+            this.setState({
+                itemname: name,
+                itemprice: price,
+                itemtype: type,
+                itempresent: false
+            })
+        }
+    }    
 
 componentWillMount() {
     //Get the restaurant details
@@ -38,12 +63,15 @@ componentWillMount() {
         }
     })
 
-    xhrRestaurant.open("GET", this.props.baseUrl+"restaurant/2461973c-a238-11e8-9077-720006ceb890");
+    xhrRestaurant.open("GET", this.props.baseUrl+"restaurant/"+this.props.match.params.id);
     xhrRestaurant.setRequestHeader("Cache-Control", "no-cache");
     xhrRestaurant.setRequestHeader("Access-Control-Allow-Origin", "*");
     xhrRestaurant.send(restaurantData);
 
 }
+
+    
+
 
     render() {
         let restaurant = this.state.restaurantDetail;
@@ -107,42 +135,71 @@ componentWillMount() {
                     </div>
                 </div>
 
-                <div className="itemsNOrderDiv">
-                       {restaurant.categories.map(category => ( 
-                           
-                           <List key={category.id}>
-                                <Typography variant="h4">{category.category_name}</Typography>
-                                <Divider />
-                                {category.item_list.map(item => (
-                                    <ListItem key={item.id}>
-                                        {item.item_type === "NON_VEG" ? <FontAwesomeIcon className="red" icon={faCircle}/>:
-                                        <FontAwesomeIcon className="green" icon={faCircle}/>}
+                <div className="itemandCart">
+                            
+                    <div className="itemsDiv">
+                        {restaurant.categories.map(category => ( 
+                            
+                            <List key={category.id}>
+                                    <Typography variant="h4">{category.category_name}</Typography>
+                                    <Divider />
+                                    {category.item_list.map(item => (
+                                        <ListItem key={item.id}>
+                                            {item.item_type === "NON_VEG" ? <FontAwesomeIcon className="red itemType" icon={faCircle}/>:
+                                            <FontAwesomeIcon className="green itemType" icon={faCircle}/>}
 
-                                        <Typography variant="h6">
-                                            <span className="itemName">{item.item_name}</span>
-                                        </Typography>
+                                            <Typography variant="h6">
+                                                <span className="itemName">{item.item_name}</span>
+                                            </Typography>
 
-                                        <Typography>
-                                            <span className="itemPrice">
-                                            <FontAwesomeIcon icon={faRupeeSign} />
-                                            {item.price}
-                                            </span>
+                                            <Typography>
+                                                <span className="itemPrice">
+                                                <FontAwesomeIcon icon={faRupeeSign} />
+                                                {item.price}
+                                                </span>
+                                                
+                                            </Typography>
+
+                                            <Typography>
+                                                <span className="addIcon">
+                                                    <AddIcon onClick={this.addItemHandler(item.item_name, item.price, item.item_type, item.id)} />
+                                                </span>
+                                            </Typography>
+
+                                        
                                             
-                                        </Typography>
+                                        </ListItem>
+                                    ))}
+                            </List>
+                        ))}                    
+                    </div>
+                                        
+                    <div className="cart">
+                          <br /><br /><br /><br /><br /><br />              
+                        <Card className="checkoutcart">
+                                <div className="shoppingCart">
+                                    <br />
+                                    
+                                    <ShoppingCartIcon className="shoppingIcon" />
+                                    <Typography variant="h5" display="inline">My Cart</Typography>
+                                    <br/>
+                                    <List>
+                                        {
+                                            
+                                        }
 
-                                        <Typography>
-                                            <span className="addIcon">
-                                                <AddIcon />
-                                            </span>
-                                        </Typography>
+                                    </List>
+                                        
+                                    
+                                </div>
 
-                                       
-                                         
-                                    </ListItem>
-                                ))}
-                           </List>
-                       ))}                    
-                </div>
+                        </Card>
+
+
+                    </div>
+
+                </div>                         
+
             </div>
         )
     }

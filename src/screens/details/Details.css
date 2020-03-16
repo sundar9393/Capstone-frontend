@@ -29,7 +29,7 @@
       color: gray;
   }
   
-  .itemsNOrderDiv {
+  .itemsDiv {
     width: 50%;
     display: flex;  
     margin-top: 25px;
@@ -49,8 +49,10 @@
       color: green;
   }
 
+  
+
   .itemName {
-      margin-left: 15px;
+    margin-left: 15px;    
       
   }
 
@@ -64,3 +66,25 @@
     left: 600px;
 }
 
+.itemandCart {
+    display:flex;
+    flex-direction: row;
+}
+
+.cart {
+    margin-left: 150px;
+}
+
+.checkoutcart {
+    min-width: 400px;
+    min-height: 200px;
+}
+
+.shoppingCart {
+    margin-left: 15px;
+}
+
+.shoppingIcon {
+    margin-right: 20px;
+    margin-top: 10px;
+}
