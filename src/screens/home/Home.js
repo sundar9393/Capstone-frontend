@@ -33,36 +33,39 @@ class Home extends Component {
         xhr.send(data);
     }
 
+    restaurantClickHandler = (restaurantId) => {
+        this.props.history.push('/restaurant/' + restaurantId);
+    }
+
     render() {
         return (
             <div>
                 <Header baseUrl={this.props.baseUrl} />
                 <div className="cardContainer">
                     {this.state.restaurants.map(restaurant => (
-                        <Card key={restaurant.id} id={restaurant.id} className="restaurantCard">
+                        <Card key={restaurant.id} id={restaurant.id} className="restaurantCard" onClick={() => this.restaurantClickHandler(restaurant.id)}>
                             <CardActionArea>
                                 <CardMedia
                                     className="restaurantImage"
                                     image={restaurant.photo_URL} />
+                                <div className="restaurantName">
+                                    {restaurant.restaurant_name}
+                                </div>
+                                <div className="restaurantCategories">
+                                    {restaurant.categories}
+                                </div>
+                                <div className="restaurantDetails">
+                                    <div className="restaurantRating">
+                                        <FontAwesomeIcon icon={faStar} />
+                                        <span> {restaurant.customer_rating}</span>
+                                        <span> ({restaurant.number_customers_rated})</span>
+                                    </div>
+                                    <div className="restaurantPrice">
+                                        <FontAwesomeIcon icon={faRupeeSign} />
+                                        <span> {restaurant.average_price} for two</span>
+                                    </div>
+                                </div>
                             </CardActionArea>
-                            <div className="restaurantName">
-                                {restaurant.restaurant_name}
-                            </div>
-                            <div className="restaurantCategories">
-                                {restaurant.categories}
-                            </div>
-                            <div className="restaurantDetails">
-                                <div className="restaurantRating">
-                                    <FontAwesomeIcon icon={faStar} />
-                                    <span> {restaurant.customer_rating}</span>
-                                    <span> ({restaurant.number_customers_rated})</span>
-                                </div>
-                                <div className="restaurantPrice">
-                                    <FontAwesomeIcon icon={faRupeeSign} />
-                                    <span> {restaurant.average_price} for two</span>
-                                </div>
-                            </div>
-
                         </Card>
                     ))}
                 </div>
