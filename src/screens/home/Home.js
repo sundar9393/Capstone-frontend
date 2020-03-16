@@ -24,7 +24,9 @@ class Home extends Component {
 
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
-                that.setState({ restaurants: JSON.parse(this.responseText) });
+                console.log(JSON.parse(this.responseText));
+                that.setState({ restaurants: JSON.parse(this.responseText).restaurants });
+                
             }
         })
 
@@ -34,15 +36,17 @@ class Home extends Component {
     }
 
     restaurantClickHandler = (restaurantId) => {
-        this.props.history.push('/restaurant/' + restaurantId);
+        this.props.history.push(this.props.baseUrl+'restaurant/' + restaurantId);
     }
 
     render() {
+        let restaurantList = this.state.restaurants;
+        console.log(this.state.restaurants)
         return (
             <div>
                 <Header baseUrl={this.props.baseUrl} />
                 <div className="cardContainer">
-                    {this.state.restaurants.map(restaurant => (
+                    {restaurantList.map(restaurant => (
                         <Card key={restaurant.id} id={restaurant.id} className="restaurantCard" onClick={() => this.restaurantClickHandler(restaurant.id)}>
                             <CardActionArea>
                                 <CardMedia

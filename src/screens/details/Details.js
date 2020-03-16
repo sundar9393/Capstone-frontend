@@ -63,7 +63,7 @@ componentWillMount() {
         }
     })
 
-    xhrRestaurant.open("GET", this.props.baseUrl+"restaurant/2461973c-a238-11e8-9077-720006ceb890");
+    xhrRestaurant.open("GET", this.props.baseUrl+"restaurant/"+this.props.match.params.id);
     xhrRestaurant.setRequestHeader("Cache-Control", "no-cache");
     xhrRestaurant.setRequestHeader("Access-Control-Allow-Origin", "*");
     xhrRestaurant.send(restaurantData);
@@ -184,7 +184,9 @@ componentWillMount() {
                                     <Typography variant="h5" display="inline">My Cart</Typography>
                                     <br/>
                                     <List>
-                                        {}
+                                        {
+                                            
+                                        }
 
                                     </List>
                                         
