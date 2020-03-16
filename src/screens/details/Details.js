@@ -31,21 +31,7 @@ class Details extends Component {
     }
 
     addItemHandler = (name, price, type, id) => {
-        if(this.state.cartItems.includes(id)){
-            this.setState({
-                itempresent: true,
-                itemname: "",
-                itemprice: "",
-                itemtype: ""
-            })
-        } else {
-            this.setState({
-                itemname: name,
-                itemprice: price,
-                itemtype: type,
-                itempresent: false
-            })
-        }
+        
     }    
 
 componentWillMount() {

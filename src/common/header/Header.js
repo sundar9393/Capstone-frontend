@@ -46,7 +46,7 @@ class Header extends Component {
     constructor() {
         super();
         this.state = {
-            moviesList: [{}],
+            restaurantList: [{}],
             modalIsOpen: false,
             value: 0,
             contactnumber: "",
@@ -83,7 +83,7 @@ class Header extends Component {
         searchMovies.addEventListener("readystatechange", function() {
             if(this.readyState === 4) {
                 console.log(JSON.parse(this.responseText));
-                that.setState({moviesList: JSON.parse(this.responseText).movies});
+                that.setState({restaurantList: JSON.parse(this.responseText).movies});
             }
         })
 
@@ -186,7 +186,7 @@ class Header extends Component {
             }
         })
 
-        xhrlogin.open("POST", this.props.baseUrl+"customer/login");
+        xhrlogin.open("POST", "http://localhost:8080/api/customer/login");
         xhrlogin.setRequestHeader("authorization", "Basic "+loginAuthHeader);
         xhrlogin.setRequestHeader("Cache-Control", "no-cache");
         xhrlogin.send(loginData);

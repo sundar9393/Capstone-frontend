@@ -36,7 +36,7 @@ class Home extends Component {
     }
 
     restaurantClickHandler = (restaurantId) => {
-        this.props.history.push(this.props.baseUrl+'restaurant/' + restaurantId);
+        this.props.history.push('/details/'+restaurantId);
     }
 
     render() {
