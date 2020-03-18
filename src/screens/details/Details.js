@@ -22,17 +22,83 @@ class Details extends Component {
                 address: {},
                 categories: []
             },
-            cartItems: [],
-            itemname: "",
-            itemprice: "",
-            itemtype: "",
-            itempresent: false
+            cartItems: [{}]            
         }
     }
 
     addItemHandler = (name, price, type, id) => {
+
+        console.log(name, price, type, id);
+
+       //local array of objects to replace the state variable
+        let itemsAdded = [{}];
+        let isItemAdded = false;
+
+        //i iterate through the state variable, if it matches the id parameter i increase the quantity of current object by 1
+       if(this.state.cartItems.length !== 0) {
+        
+        {this.state.cartItems.forEach((itemobj, index) => {
+            if(itemobj.itemid === id ) {
+
+                let itemObject = {
+                    itemid: id,
+                    itemname: name,
+                    itemtype: type,
+                    itemprice: price,
+                    quantity: itemobj.quantity + 1
+                }
+
+                itemsAdded.push(itemObject);
+                isItemAdded = true;
+
+            } else {
+
+                let itemObject = {
+                    itemid: itemobj.itemid,
+                    itemname: itemobj.itemname,
+                    itemtype: itemobj.itemtype,
+                    itemprice: itemobj.itemprice,
+                    quantity: itemobj.quantity
+                }
+
+                itemsAdded.push(itemObject)
+
+            } 
+
+        })}
+       } else {
+           let itemObject = {
+            itemid: id,
+            itemname: name,
+            itemtype: type,
+            itemprice: price,
+            quantity: 1
+           }
+
+           itemsAdded.push(itemObject)
+           isItemAdded = true;     
+        }
+
+        if(!isItemAdded) {
+
+            let itemObject = {
+                itemid: id,
+                itemname: name,
+                itemtype: type,
+                itemprice: price,
+                quantity: 1
+               }
+
+               itemsAdded.push(itemObject)
+
+        }
+        
+        console.log(itemsAdded);
+        this.setState({cartItems: itemsAdded});
         
     }    
+
+
 
 componentWillMount() {
     //Get the restaurant details
@@ -148,7 +214,7 @@ componentWillMount() {
 
                                             <Typography>
                                                 <span className="addIcon">
-                                                    <AddIcon onClick={this.addItemHandler(item.item_name, item.price, item.item_type, item.id)} />
+                                                    <AddIcon onClick={() => this.addItemHandler(item.item_name, item.price, item.item_type, item.id)} />
                                                 </span>
                                             </Typography>
 
@@ -170,7 +236,18 @@ componentWillMount() {
                                     <Typography variant="h5" display="inline">My Cart</Typography>
                                     <br/>
                                     <List>
-                                        {
+                                        
+                                        {this.state.cartItems.length === 0 ? "" : this.state.cartItems.map(item => (
+                                            <ListItem>
+                                                {item.itemtype === "NON_VEG" ? <FontAwesomeIcon className="red itemType" icon={faCircle}/>:
+                                            <FontAwesomeIcon className="green itemType" icon={faCircle}/>}
+
+                                            <Typography>
+                                                {item.itemname}
+                                            </Typography>
+
+                                            </ListItem>
+                                        ))
                                             
                                         }
 
