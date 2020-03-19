@@ -10,6 +10,8 @@ import { faCircle } from '@fortawesome/free-solid-svg-icons';
 import AddIcon from '@material-ui/icons/Add';
 import Card from '@material-ui/core/Card';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import RemoveIcon from '@material-ui/icons/Remove';
+import Button from '@material-ui/core/Button';
 
 
 class Details extends Component {
@@ -22,17 +24,83 @@ class Details extends Component {
                 address: {},
                 categories: []
             },
-            cartItems: [],
-            itemname: "",
-            itemprice: "",
-            itemtype: "",
-            itempresent: false
+            cartItems: []            
         }
     }
 
     addItemHandler = (name, price, type, id) => {
+
+        console.log(name, price, type, id);
+
+       //local array of objects to replace the state variable
+        let itemsAdded = [];
+        let isItemAdded = false;
+
+        //i iterate through the state variable, if it matches the id parameter i increase the quantity of current object by 1
+       if(this.state.cartItems.length !== 0) {
+        
+        {this.state.cartItems.forEach((itemobj, index) => {
+            if(itemobj.itemid === id ) {
+
+                let itemObject = {
+                    itemid: id,
+                    itemname: name,
+                    itemtype: type,
+                    itemprice: price,
+                    quantity: itemobj.quantity + 1
+                }
+
+                itemsAdded.push(itemObject);
+                isItemAdded = true;
+
+            } else {
+
+                let itemObject = {
+                    itemid: itemobj.itemid,
+                    itemname: itemobj.itemname,
+                    itemtype: itemobj.itemtype,
+                    itemprice: itemobj.itemprice,
+                    quantity: itemobj.quantity
+                }
+
+                itemsAdded.push(itemObject)
+
+            } 
+
+        })}
+       } else {
+           let itemObject = {
+            itemid: id,
+            itemname: name,
+            itemtype: type,
+            itemprice: price,
+            quantity: 1
+           }
+
+           itemsAdded.push(itemObject)
+           isItemAdded = true;     
+        }
+
+        if(!isItemAdded) {
+
+            let itemObject = {
+                itemid: id,
+                itemname: name,
+                itemtype: type,
+                itemprice: price,
+                quantity: 1
+               }
+
+               itemsAdded.push(itemObject)
+
+        }
+        
+        console.log(itemsAdded);
+        this.setState({cartItems: itemsAdded});
         
     }    
+
+
 
 componentWillMount() {
     //Get the restaurant details
@@ -56,12 +124,49 @@ componentWillMount() {
 
 }
 
+
+increaseCartItem = (quantity, id) => {
+    let updatedCart = []
+
+    {this.state.cartItems.forEach((item, index) => {
+        if(item.itemid == id) {
+            item.quantity = quantity + 1;
+            updatedCart.push(item)    
+        } else {
+            updatedCart.push(item)
+        }
+    })}
+
+    this.setState({cartItems: updatedCart})
+
+}
+
+decreaseCartItem = (quantity, id) => {
+
+    let updatedCart = []
+
+    {this.state.cartItems.forEach((item, index) => {
+        if(item.itemid == id) {
+            if(item.quantity > 1) {
+                item.quantity = quantity - 1;
+                updatedCart.push(item)
+            }
+                
+        } else {
+            updatedCart.push(item)
+        }
+    })}
+
+    this.setState({cartItems: updatedCart})
+
+}
     
 
 
     render() {
         let restaurant = this.state.restaurantDetail;
         let categoryArray = [];
+        let itemcount = 0;
         return (
 
             <div>
@@ -148,7 +253,7 @@ componentWillMount() {
 
                                             <Typography>
                                                 <span className="addIcon">
-                                                    <AddIcon onClick={this.addItemHandler(item.item_name, item.price, item.item_type, item.id)} />
+                                                    <AddIcon onClick={() => this.addItemHandler(item.item_name, item.price, item.item_type, item.id)} />
                                                 </span>
                                             </Typography>
 
@@ -170,11 +275,40 @@ componentWillMount() {
                                     <Typography variant="h5" display="inline">My Cart</Typography>
                                     <br/>
                                     <List>
-                                        {
+                                        
+                                        {this.state.cartItems.length === 0 ? "" : this.state.cartItems.map(item => (
+                                            <ListItem>
+                                                {item.itemtype === "NON_VEG" ? <FontAwesomeIcon className="red cartItemType" icon={faCircle}/>:
+                                            <FontAwesomeIcon className="green cartItemType" icon={faCircle}/>}
+
+
+                                            <Typography>
+                                                <span className="cartItem">{item.itemname}</span>
+                                            </Typography>
+
+                                            <RemoveIcon onClick={() => this.decreaseCartItem(item.quantity, item.itemid)} />
+                                             {item.quantity}
+                                            <AddIcon onClick={() => this.increaseCartItem(item.quantity, item.itemid)} />
+
+                                            <FontAwesomeIcon icon={faRupeeSign} className="cartItemCurrency" />
+                                            {item.itemprice * item.quantity}
+
+
+                                            </ListItem>
+                                        ))
                                             
                                         }
 
                                     </List>
+                                     <br/><br/>   
+                                    <span className="totalAmount">TOTAL AMOUNT</span>
+                                    <FontAwesomeIcon icon={faRupeeSign} />
+                                     
+                                     <br /> <br />  
+                                    <Button variant="contained" color="primary" fullWidth="true">
+                                        CHECKOUT
+                                    </Button>  
+                                    <br /> <br />
                                         
                                     
                                 </div>
