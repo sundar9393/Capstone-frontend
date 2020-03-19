@@ -24,6 +24,7 @@ class Details extends Component {
                 address: {},
                 categories: []
             },
+
             cartItems: []            
         }
     }
@@ -33,6 +34,7 @@ class Details extends Component {
         console.log(name, price, type, id);
 
        //local array of objects to replace the state variable
+
         let itemsAdded = [];
         let isItemAdded = false;
 
@@ -278,6 +280,7 @@ decreaseCartItem = (quantity, id) => {
                                         
                                         {this.state.cartItems.length === 0 ? "" : this.state.cartItems.map(item => (
                                             <ListItem>
+
                                                 {item.itemtype === "NON_VEG" ? <FontAwesomeIcon className="red cartItemType" icon={faCircle}/>:
                                             <FontAwesomeIcon className="green cartItemType" icon={faCircle}/>}
 
@@ -293,7 +296,7 @@ decreaseCartItem = (quantity, id) => {
                                             <FontAwesomeIcon icon={faRupeeSign} className="cartItemCurrency" />
                                             {item.itemprice * item.quantity}
 
-
+                                             
                                             </ListItem>
                                         ))
                                             
