@@ -10,6 +10,8 @@ import { faCircle } from '@fortawesome/free-solid-svg-icons';
 import AddIcon from '@material-ui/icons/Add';
 import Card from '@material-ui/core/Card';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import RemoveIcon from '@material-ui/icons/Remove';
+import Button from '@material-ui/core/Button';
 
 
 class Details extends Component {
@@ -22,7 +24,8 @@ class Details extends Component {
                 address: {},
                 categories: []
             },
-            cartItems: [{}]            
+
+            cartItems: []            
         }
     }
 
@@ -31,7 +34,8 @@ class Details extends Component {
         console.log(name, price, type, id);
 
        //local array of objects to replace the state variable
-        let itemsAdded = [{}];
+
+        let itemsAdded = [];
         let isItemAdded = false;
 
         //i iterate through the state variable, if it matches the id parameter i increase the quantity of current object by 1
@@ -122,12 +126,49 @@ componentWillMount() {
 
 }
 
+
+increaseCartItem = (quantity, id) => {
+    let updatedCart = []
+
+    {this.state.cartItems.forEach((item, index) => {
+        if(item.itemid == id) {
+            item.quantity = quantity + 1;
+            updatedCart.push(item)    
+        } else {
+            updatedCart.push(item)
+        }
+    })}
+
+    this.setState({cartItems: updatedCart})
+
+}
+
+decreaseCartItem = (quantity, id) => {
+
+    let updatedCart = []
+
+    {this.state.cartItems.forEach((item, index) => {
+        if(item.itemid == id) {
+            if(item.quantity > 1) {
+                item.quantity = quantity - 1;
+                updatedCart.push(item)
+            }
+                
+        } else {
+            updatedCart.push(item)
+        }
+    })}
+
+    this.setState({cartItems: updatedCart})
+
+}
     
 
 
     render() {
         let restaurant = this.state.restaurantDetail;
         let categoryArray = [];
+        let itemcount = 0;
         return (
 
             <div>
@@ -239,19 +280,38 @@ componentWillMount() {
                                         
                                         {this.state.cartItems.length === 0 ? "" : this.state.cartItems.map(item => (
                                             <ListItem>
-                                                {item.itemtype === "NON_VEG" ? <FontAwesomeIcon className="red itemType" icon={faCircle}/>:
-                                            <FontAwesomeIcon className="green itemType" icon={faCircle}/>}
+
+                                                {item.itemtype === "NON_VEG" ? <FontAwesomeIcon className="red cartItemType" icon={faCircle}/>:
+                                            <FontAwesomeIcon className="green cartItemType" icon={faCircle}/>}
+
 
                                             <Typography>
-                                                {item.itemname}
+                                                <span className="cartItem">{item.itemname}</span>
                                             </Typography>
 
+                                            <RemoveIcon onClick={() => this.decreaseCartItem(item.quantity, item.itemid)} />
+                                             {item.quantity}
+                                            <AddIcon onClick={() => this.increaseCartItem(item.quantity, item.itemid)} />
+
+                                            <FontAwesomeIcon icon={faRupeeSign} className="cartItemCurrency" />
+                                            {item.itemprice * item.quantity}
+
+                                             
                                             </ListItem>
                                         ))
                                             
                                         }
 
                                     </List>
+                                     <br/><br/>   
+                                    <span className="totalAmount">TOTAL AMOUNT</span>
+                                    <FontAwesomeIcon icon={faRupeeSign} />
+                                     
+                                     <br /> <br />  
+                                    <Button variant="contained" color="primary" fullWidth="true">
+                                        CHECKOUT
+                                    </Button>  
+                                    <br /> <br />
                                         
                                     
                                 </div>
