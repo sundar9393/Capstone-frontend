@@ -17,7 +17,7 @@ class FoodOrderingApp extends Component {
         return(
             <Router>
                 <div className="main-container">
-                    <Route exact path="/" render={({history},props) => <Home history={history} {...props} baseUrl={this.baseUrl}/>}/>
+                    <Route exact path="/" render={(props) => <Home {...props} baseUrl={this.baseUrl}/>}/>
                     <Route path="/profile" render={({history},props) => <Profile history={history} {...props} baseUrl={this.baseUrl} />} />
                     <Route path="/details/:id" render={(props) => <Details {...props} baseUrl={this.baseUrl} />} />
                 </div>

@@ -30,7 +30,7 @@ class Home extends Component {
             }
         })
 
-        xhr.open("GET", "http://localhost:8080/api/restaurant");
+        xhr.open("GET", this.props.baseUrl+"restaurant");
         xhr.setRequestHeader("Cache-Control", "no-cache");
         xhr.send(data);
     }
