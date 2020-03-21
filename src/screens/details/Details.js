@@ -169,6 +169,7 @@ decreaseCartItem = (quantity, id) => {
         let restaurant = this.state.restaurantDetail;
         let categoryArray = [];
         let itemcount = 0;
+        let cartTotal = 0;
         return (
 
             <div>
@@ -289,12 +290,12 @@ decreaseCartItem = (quantity, id) => {
                                                 <span className="cartItem">{item.itemname}</span>
                                             </Typography>
 
-                                            <RemoveIcon onClick={() => this.decreaseCartItem(item.quantity, item.itemid)} />
-                                             {item.quantity}
-                                            <AddIcon onClick={() => this.increaseCartItem(item.quantity, item.itemid)} />
+                                            <RemoveIcon className="removeIcon" onClick={() => this.decreaseCartItem(item.quantity, item.itemid)} />
+                                             <span className="itemQuantity">{item.quantity}</span>
+                                            <AddIcon className="addIconCart" onClick={() => this.increaseCartItem(item.quantity, item.itemid)} />
 
                                             <FontAwesomeIcon icon={faRupeeSign} className="cartItemCurrency" />
-                                            {item.itemprice * item.quantity}
+                                            <span className="itemTotalPrice">{item.itemprice * item.quantity}</span>
 
                                              
                                             </ListItem>
@@ -305,7 +306,15 @@ decreaseCartItem = (quantity, id) => {
                                     </List>
                                      <br/><br/>   
                                     <span className="totalAmount">TOTAL AMOUNT</span>
-                                    <FontAwesomeIcon icon={faRupeeSign} />
+                                    <FontAwesomeIcon icon={faRupeeSign} />                                    
+                                    { this.state.cartItems.length !==0 &&
+                                    this.state.cartItems.forEach((item, index) => {
+                                       cartTotal = (item.itemprice * item.quantity) + cartTotal; 
+                                    })
+                                    }
+                                    <span>{cartTotal}</span>
+
+
                                      
                                      <br /> <br />  
                                     <Button variant="contained" color="primary" fullWidth="true">
