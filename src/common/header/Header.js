@@ -43,8 +43,8 @@ const TabContainer = (props) => {
 
 class Header extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             restaurantList: [{}],
             modalIsOpen: false,
@@ -344,7 +344,10 @@ class Header extends Component {
  
 
     render() {
+        console.log(this.props.loginFirst)
+        let loginFirst = this.props.loginFirst
         return(
+            
             <div>
                 <header className='header'>
                     <FastfoodIcon className="app-logo" fontSize="large" />
@@ -394,7 +397,7 @@ class Header extends Component {
 
                 </header>
 
-                <Modal ariaHideApp={false} isOpen={this.state.modalIsOpen} contentLabel="Login"
+                <Modal ariaHideApp={false} isOpen={loginFirst?true:this.state.modalIsOpen} contentLabel="Login"
                 onRequestClose={this.closeModalHandler} style={customStyles}>
 
                     <Tabs className="tabs" value={this.state.value} onChange={this.tabChangeHandler}>
@@ -424,7 +427,10 @@ class Header extends Component {
                                 onChange={this.inputPasswordChangeHandler} />
                             <FormHelperText className={this.state.passwordRequired}>
                                     <span className="red">required</span>                               
-                            </FormHelperText>    
+                            </FormHelperText>   
+                            <br />
+                            {this.props.loginFirst === true ?
+                            <span className="red">Please Login Before Checkout!!</span>: ""} 
 
                             <br /><br />
                             <Button variant="contained" color="primary" onClick={this.loginClickHandler}>

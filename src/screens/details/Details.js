@@ -25,7 +25,8 @@ class Details extends Component {
                 categories: []
             },
 
-            cartItems: []            
+            cartItems: [],
+            loginFirst: null         
         }
     }
 
@@ -162,10 +163,22 @@ decreaseCartItem = (quantity, id) => {
     this.setState({cartItems: updatedCart})
 
 }
+
+toCheckoutPageHandler = () => {
+    //i need to check whether the customer is logged in using session storage 
+    
+    if(sessionStorage.getItem("access-token") === null) {
+        this.setState({loginFirst: true})
+    } else {
+        this.setState({loginFirst: false})
+    }
+
+}
     
 
 
     render() {
+        
         let restaurant = this.state.restaurantDetail;
         let categoryArray = [];
         let itemcount = 0;
@@ -173,7 +186,7 @@ decreaseCartItem = (quantity, id) => {
         return (
 
             <div>
-                <Header />
+                <Header loginFirst={this.state.loginFirst} />
                 <div className="restaurantDiv">
 
                     <div className="leftDetails">
@@ -317,7 +330,7 @@ decreaseCartItem = (quantity, id) => {
 
                                      
                                      <br /> <br />  
-                                    <Button variant="contained" color="primary" fullWidth="true">
+                                    <Button variant="contained" color="primary" fullWidth="true" onClick={this.toCheckoutPageHandler}>
                                         CHECKOUT
                                     </Button>  
                                     <br /> <br />
